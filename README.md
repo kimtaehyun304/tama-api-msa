@@ -13,4 +13,4 @@ db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication
 ### 버전 업그레이드 과정
 버전1_로컬 개발 단계: nginx(spring cloud gateway 대체), api 호출 기반 아키텍처(이벤트 기반 x)
 
-버전2에 SAGA 패턴 적용 예정
+버전2에 SAGA 패턴 적용 예정 (어려워서)
