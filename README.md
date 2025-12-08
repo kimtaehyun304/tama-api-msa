@@ -2,6 +2,7 @@
 
 기존 쇼핑몰: https://github.com/kimtaehyun304/tama-api  
 db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication  
+
 스택: 스프링 부트3, data jpa, mysql 8.0.37(복제) / openFeign, kafka  
 
 ### MSA 종류 
