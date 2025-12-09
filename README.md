@@ -14,7 +14,7 @@ db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication
 ### 버전 업그레이드 과정
 버전1_로컬 개발 단계  
 * nginx gateway / api 호출 기반 아키텍처
-* spring cloud gateway 가용성 부족. aws 로드밸런서 쓸 예정 → nginx gateway
+* spring cloud gateway 가용성 부족 → aws 로드밸런서 쓸 예정 → nginx gateway
 * 주문 저장 실패해도 정합성 일치하니 괜찮 → api 호출 기반 아키텍처 적합
 * 조인 쿼리용 db 동기화를 api 호출로 하면, 호출 실패 시 정합성 불일치 → kafka로 정합성 보장
 
