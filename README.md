@@ -4,18 +4,30 @@
 db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication  
 
 ### 프로젝트 스택
-* 스프링 부트3, data jpa, mysql 8.0.37(복제)  
-* openFeign, kafka  
+* 스프링 부트3, data jpa, mysql 8
+* nginx gateway, openFeign, kafka  
 
-### MSA 종류 
+### MSA 구성
 * 주문 / 상품 / 회원
-* 조인 쿼리용 서비스 (api composition 대체, kafka 동기화)
+* 조인 쿼리용 MSA (api composition 대체)
 
-### 버전 업그레이드 과정
-버전1_로컬 개발 단계  
-* nginx gateway / api 호출 기반 아키텍처
-* spring cloud gateway 가용성 부족 → aws 로드밸런서 쓸 예정 → nginx gateway
-* 주문 저장 실패해도 정합성 일치하니 괜찮 → api 호출 기반 아키텍처 적합
-* 조인 쿼리용 db 동기화를 api 호출로 하면, 호출 실패 시 정합성 불일치 → kafka로 정합성 보장
+### 기술 선택 근거
+nginx gateway
+* 단순 라우팅이 필요한거라, sping cloud gateway 선택 X
+* JWT 인증을 각 MSA에서 수행 (이미 만든 api의 url과 로직을 수정하긴 어려움)
+* 단일 엔드포인트라, aws 로드 밸런서로 교체하여 고가용성을 챙기기 위함
 
-버전2에 SAGA 패턴 적용 예정 (어려워서)
+kafka
+* 조인 쿼리용 DB 동기화를 위해 사용
+* 동기화 데이터 정합성을 위해, API 호출 대신 메시지 시스템 사용 (메시지 무손실)
+
+openFeign
+* API 메소드처럼 만들 수 있어서 가독성 좋음
+* @GetMapping에 @RequestBody를 쓰기위해, HttpURLConnection → Apache HTTP Client 5 변경
+* HTTP 표준이 바뀌어서 GET 요청에 요청 바디 써도 된다고 생각
+* 성능도 Apache HTTP Client 5이 더 나음
+
+API 동기 호출 아키텍처
+* 이벤트 기반 아키텍처로 개발하다 복잡해서 → API 동기 호출 아키텍처 변경
+* 무손실 방식이 아니라서, 재고 롤백 API 호출 실패하면 정합성 안 맞는 한계 → 로그 남김
+
