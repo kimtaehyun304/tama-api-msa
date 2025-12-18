@@ -2,6 +2,10 @@
 
 기존 쇼핑몰: https://github.com/kimtaehyun304/tama-api  
 db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication  
+주문 msa: https://github.com/kimtaehyun304/tama-api-order  
+상품 msa: https://github.com/kimtaehyun304/tama-api-item  
+회원 msa: https://github.com/kimtaehyun304/tama-api-member  
+읽기 msa: https://github.com/kimtaehyun304/tama-api-common 
 
 ### 프로젝트 스택
 * 스프링 부트3, data jpa, mysql 8
