@@ -7,6 +7,9 @@ db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication
 회원 msa: https://github.com/kimtaehyun304/tama-api-member  
 읽기 msa: https://github.com/kimtaehyun304/tama-api-common 
 
+<img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/8e3e0f7b-c72f-4b91-87e8-ef0004ee4fc4" />
+
+
 ### 프로젝트 스택
 * 스프링 부트3, data jpa, mysql 8
 * nginx gateway, openFeign, kafka  
