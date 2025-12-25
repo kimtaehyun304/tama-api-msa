@@ -41,6 +41,6 @@ API 동기 호출 아키텍처
 
 분산 트랜잭션은 try-cathc와 이벤트로 구현  
 
-feignApi는 외부 IP 차단  
+feignApi는 내부 사설 IP만 허용
 
 
