@@ -22,7 +22,6 @@ db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication
 nginx gateway
 * 단순 라우팅이 필요한거라, sping cloud gateway 선택 X
 * JWT 인증을 각 MSA에서 수행 (이미 만든 api의 url과 로직을 수정하긴 어려움)
-* 단일 엔드포인트라, aws 로드 밸런서로 교체하여 고가용성을 챙기기 위함
 
 kafka
 * 조인 쿼리용 DB 동기화를 위해 사용
