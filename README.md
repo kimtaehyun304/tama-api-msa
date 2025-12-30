@@ -16,12 +16,12 @@ db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication
 
 ### MSA 구성
 * 주문 / 상품 / 회원
-* 조인 쿼리용 MSA (api composition 대체)
+* 조인 쿼리용 msa (api composition 대체)
 
 ### 기술 선택 근거
 nginx gateway
 * 단순 라우팅이 필요한거라, sping cloud gateway 선택 X
-* JWT 인증을 각 MSA에서 수행 (이미 만든 api의 url과 로직을 수정하긴 어려움)
+* jwt 인증을 각 msa에서 수행 (이미 만든 api의 url과 로직을 수정하긴 어려움)
 
 kafka
 * 조인 쿼리용 DB 동기화를 위해 사용
@@ -34,7 +34,7 @@ openFeign
 * HTTP 표준이 바뀌어서 GET 요청에 요청 바디 써도 된다고 생각
 * 성능도 Apache HTTP Client 5이 더 나음
 
-API 동기 호출 아키텍처 (try-catch)
+api 동기 호출 아키텍처 (try-catch)
 * 이벤트 기반 아키텍처 보다 간단 
 * 주문 실패로 인한 재고 롤백은 이벤트 발행
 * 최종 일관성 방식이 아니라 위해 폴링 안해도 됨
