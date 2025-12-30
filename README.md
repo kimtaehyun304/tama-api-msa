@@ -29,9 +29,9 @@ kafka
 * 주의 사항 앎 ex) 이벤트 소비 순서, 중복, 수동 커밋
 
 openFeign
-* API 메소드처럼 만들 수 있어서 가독성 좋음
+* api 메소드처럼 만들 수 있어서 가독성 좋음
 * @GetMapping에 @RequestBody를 쓰기위해, HttpURLConnection → Apache HTTP Client 5 변경
-* HTTP 표준이 바뀌어서 GET 요청에 요청 바디 써도 된다고 생각
+* http 표준이 바뀌어서 get 요청에 요청 바디 써도 된다고 생각
 * 성능도 Apache HTTP Client 5이 더 나음
 
 api 동기 호출 아키텍처 (try-catch)
