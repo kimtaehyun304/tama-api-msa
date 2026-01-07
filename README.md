@@ -47,6 +47,8 @@ kafka 설정
 
 Resilience4j 설정
 
+주문은 msa 호출이 많다.
+상품 조회는 msa 호출이 없다.
 
 
 
