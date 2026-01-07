@@ -1,7 +1,5 @@
 <h1>기존 쇼핑몰 msa 전환</h1>
-
-기존 쇼핑몰: https://github.com/kimtaehyun304/tama-api  
-db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication  
+  
 주문 msa: https://github.com/kimtaehyun304/tama-api-order  
 상품 msa: https://github.com/kimtaehyun304/tama-api-item  
 회원 msa: https://github.com/kimtaehyun304/tama-api-member  
@@ -9,11 +7,12 @@ db 수평 확장: https://github.com/kimtaehyun304/tama-api-replication
 
 <img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/8e3e0f7b-c72f-4b91-87e8-ef0004ee4fc4" />
 
-### 프로젝트 스택
-* 스프링 부트3, data jpa, mysql 8
+### 기술
+* 스프링 부트 3.4 (mvc, security, valid, aop, cache, batch)
+* mysql 8, hibernate 6, data jpa, querydsl 5
 * nginx gateway, openFeign, kafka, resilience4j 
 
-### MSA 구성
+### 아키텍처
 * 주문 / 상품 / 회원
 * 조인 쿼리용 msa (api composition 대체)
 
