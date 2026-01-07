@@ -5,7 +5,7 @@
 회원 msa: https://github.com/kimtaehyun304/tama-api-member  
 읽기 msa: https://github.com/kimtaehyun304/tama-api-common 
 
-<img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/cb7f9a11-0679-4b42-9759-82267055b42d" />
+<img width="800" height="800" alt="Image" src="https://github.com/user-attachments/assets/cb7f9a11-0679-4b42-9759-82267055b42d" />
 
 ### 기술
 * 스프링 부트 3.4 (mvc, security, valid, aop, cache, batch)
