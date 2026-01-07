@@ -1,43 +1,52 @@
 <h1>기존 쇼핑몰 msa 전환</h1>
   
+<img width="800" height="800" alt="Image" src="https://github.com/user-attachments/assets/cb7f9a11-0679-4b42-9759-82267055b42d" />
+
+### 프로젝트 주소
 주문 msa: https://github.com/kimtaehyun304/tama-api-order  
 상품 msa: https://github.com/kimtaehyun304/tama-api-item  
 회원 msa: https://github.com/kimtaehyun304/tama-api-member  
-읽기 msa: https://github.com/kimtaehyun304/tama-api-common 
-
-<img width="800" height="800" alt="Image" src="https://github.com/user-attachments/assets/cb7f9a11-0679-4b42-9759-82267055b42d" />
+공통 monolith: https://github.com/kimtaehyun304/tama-api-common 
 
 ### 기술
 * 스프링 부트 3.4 (mvc, security, valid, aop, cache, batch)
 * mysql 8, hibernate 6, data jpa, querydsl 5
 * nginx gateway, openFeign, kafka, resilience4j 
 
-### 아키텍처
-* 주문 / 상품 / 회원
-* 조인 쿼리용 msa (api composition 대체)
-
-### 기술 선택 근거
+### 구조
+* msa끼리는 rest 방식으로 통신
+* kafaka로 데이터 동기화
+  
+### msa 기술 선택 근거
 nginx gateway
 * 단순 라우팅이 필요한거라, sping cloud gateway 선택 X
 * jwt 인증을 각 msa에서 수행 (이미 만든 api의 url과 로직을 수정하긴 어려움)
-* 
-api 동기 호출 아키텍처 (try-catch)
-* 이벤트 기반 아키텍처, 2pc 보다 간단
-* 주문 실패로 인한 재고 롤백은 이벤트 발행
-* 최종 일관성 방식이 아니라 위해 폴링 안해도 됨
 
 kafka
 * 조인 쿼리용 DB 동기화를 위해 사용
-* 동기화 데이터 정합성을 위해, API 호출 대신 메시지 시스템 사용 (메시지 무손실)
+* 데이터 정합성을 위해 메시지 시스템 사용 (장애 이후 자동 복구)
 * 주의 사항 앎 ex) 이벤트 소비 순서, 중복, 수동 커밋
 
 openFeign
-* api 메소드처럼 만들 수 있어서 가독성 좋음
-* @GetMapping에 @RequestBody를 쓰기위해, HttpURLConnection → Apache HTTP Client 5 변경
-* http 표준이 바뀌어서 get 요청에 요청 바디 써도 된다고 생각
-* 성능도 Apache HTTP Client 5이 더 나음
-* feignApi는 내부 사설 IP만 허용
+* @GetMapping에 @RequestBody를 쓰기위해, 내부 구현체 Apache HTTP Client 5로 변경
+* http 표준이 바뀌어서 get 요청에 요청 바디 써도 된다는 입장
+* 성능도 기본 구현체인 HttpURLConnection 보다 나음
 
 resilience4j
+
+### 트러블 슈팅
+트랜잭션 전파
+
+@Transactional aop
+
+JPA CascadeType.PERSIST 동작 x
+
+kafka 설정
+
+Resilience4j 설정
+
+
+
+
 
 
