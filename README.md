@@ -38,11 +38,25 @@ openFeign
 resilience4j
 
 ### 트러블 슈팅
+JPA CascadeType.PERSIST 미동작으로 인한 연관관계 데이터 저장 실패
+* 배경: 카프카 리스너에서 PK가 있는 엔티티 저장 (공통 mysql 동기화)
+* 원인: data jpa save는 엔티티에 PK가 있으면 merge 수행
+* merge라서 JPA CascadeType.PERSIST 미동작
+* 해결: jpa em.persist 사용
+
+@Transactional 미동작으로 인한 em.flush 미동작
+* item -< colorItems (1:N)
+* 흐름: syncItem 메서드 실행 (saveItem → saveColorItems)
+* 배경: saveColorItems 실패 (item PK가 없다고 롤백됨)
+* 원인: syncItem에서 saveItem 직접 호출 → @Transactional 미동작으로 인한 em.flush 미동작 → insert item 쿼리 미발생
+* 해결: saveItem에 em.flush 추가
+
 트랜잭션 전파
+* 자식 @Transactional
 
-@Transactional aop
 
-JPA CascadeType.PERSIST 동작 x
+
+
 
 kafka 설정
 
