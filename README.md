@@ -18,7 +18,7 @@
 * kafaka로 데이터 동기화
 * 공통 mysql은 테이블 및 컬럼 최소화
 * mysql replication 사용
-* zero payload 지향 (불가능한 로직 존재)
+* zero payload (일부 로직 불가)
   
 ### msa 기술 선택 근거
 nginx gateway
