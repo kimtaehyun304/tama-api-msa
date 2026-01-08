@@ -60,7 +60,7 @@ kafka 설정
 * 이벤트 소비 순서 보장, 중복 방지: 1토픽 1파티션, consumer group
 
 openFeign 설정
-* http 응답을 예외 메시지로 쓰기 위해 ErrorDecoder 오버라이드 ex)직렬화
+* http 응답을 예외 메시지로 쓰기 위해 ErrorDecoder 오버라이드 ex)응답 직렬화
 
 Resilience4j 설정
 * fallback을 등록하지 않으면, NoFallbackAvailableException 발생 (예외를 래핑함)
