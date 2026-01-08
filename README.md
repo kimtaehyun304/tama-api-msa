@@ -32,40 +32,41 @@ kafka
 
 openFeign
 * @GetMapping에 @RequestBody를 쓰기위해, 내부 구현체 Apache HTTP Client 5로 변경
-* http 표준이 바뀌어서 get 요청에 요청 바디 써도 된다는 입장
+* http 표준이 바뀌어서 get 요청에 요청 바디 써도 된다고 판단
 * 성능도 기본 구현체인 HttpURLConnection 보다 나음
 
-resilience4j
-
 ### 트러블 슈팅
-JPA CascadeType.PERSIST 미동작으로 인한 연관관계 데이터 저장 실패
-* 배경: 카프카 리스너에서 PK가 있는 엔티티 저장 (공통 mysql 동기화)
-* 원인: data jpa save는 엔티티에 PK가 있으면 merge 수행
+jpa CascadeType.PERSIST 미동작으로 인한, 연관관계 데이터 저장 실패
+* 상황: 카프카 리스너에서 PK가 있는 엔티티 저장 (공통 mysql 동기화)
+* 원인: data jpa save는 엔티티에 pk가 있으면 merge 수행
 * merge라서 JPA CascadeType.PERSIST 미동작
 * 해결: jpa em.persist 사용
 
-@Transactional 미동작으로 인한 em.flush 미동작
+@Transactional 미동작으로 인한 jpa em.flush 미동작
 * item -< colorItems (1:N)
 * 흐름: syncItem 메서드 실행 (saveItem → saveColorItems)
-* 배경: saveColorItems 실패 (item PK가 없다고 롤백됨)
+* 상황: saveColorItems 실패 (item PK가 없다고 롤백됨)
 * 원인: syncItem에서 saveItem 직접 호출 → @Transactional 미동작으로 인한 em.flush 미동작 → insert item 쿼리 미발생
 * 해결: saveItem에 em.flush 추가
 
-트랜잭션 전파
-* 자식 @Transactional
-
-
-
-
-
+커밋 전까지는 해당 트랜젝션에서만 select 가능 → zero payload 불가
+* 흐름: saveMemberOrder 메서드 실행 (saveOrder → decreaseStocks → useCoupon)
+* 상황: memberFeignClient.useCoupon(orderId) 호출 실패 (NOT_FOUND_ORDER)
+* 원인: 트랜잭션이 아직 안 끝나서 커밋 미동작 → 타 트랜잭션에서는 select 불가
+* 해결: orderId 말고 필요한 데이터 전달 ex) usedCouponPrice, orderItemsPrice
+  
 kafka 설정
+* application.yml에서 prducer 직렬화, consumer 역직렬화, listener ack-mode: manual
+* 이벤트 소비 순서 보장, 중복 방지: 1토픽 1파티션, consumer group
+
+openFeign 설정
+* http 응답을 예외 메시지로 쓰기 위해 ErrorDecoder 오버라이드 ex)직렬화
 
 Resilience4j 설정
+* fallback을 등록하지 않으면, NoFallbackAvailableException 발생 (예외를 래핑함)
+* fallback 추가하고 예외를 그대로 반환하도록 설정 ex)T타입 반환
 
-주문은 msa 호출이 많다.
-상품 조회는 msa 호출이 없다.
-
-
-
-
-
+### 알게된 점
+msa라고 장애 격리가 완벽하진 않다.
+* 주문 로직은 상품 msa, 회원 msa를 호출해야 한다 → 두 msa 중 하나만 장애가나도 주문 실패
+* 상품 조회는 타 msa 호출이 없다. → 주문 msa, 회원 msa가 장애가나도 상관 없음
