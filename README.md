@@ -41,15 +41,20 @@ jpa CascadeType.PERSIST 미동작으로 인한, 연관관계 데이터 저장 �
 * 원인: data jpa save는 엔티티에 pk가 있으면 merge 수행
 * merge라서 JPA CascadeType.PERSIST 미동작
 * 해결: jpa em.persist 사용
+  
+<a href="https://github.com/kimtaehyun304/tama-api-common/blob/7d452fa1c0eb8f4c2c92fe5e9374cac73e851619/src/main/java/org/example/tamaapi/service/OrderService.java#L43">
+  @Transactional 미동작으로 인한 jpa em.flush 미동작
+</a>
 
-@Transactional 미동작으로 인한 jpa em.flush 미동작
 * item -< colorItems (1:N)
 * 흐름: syncItem 메서드 실행 (saveItem → saveColorItems)
 * 상황: saveColorItems 실패 (item PK가 없다고 롤백됨)
 * 원인: syncItem에서 saveItem 직접 호출 → @Transactional 미동작으로 인한 em.flush 미동작 → insert item 쿼리 미발생
 * 해결: saveItem에 em.flush 추가
 
-커밋 전까지는 해당 트랜젝션에서만 select 가능 → zero payload 불가
+<a href="https://github.com/kimtaehyun304/tama-api-order/blob/b9185abef225fd19b70eeec796272ff21976da2c/src/main/java/org/example/tamaapi/command/order/OrderService.java#L94">
+  커밋 전까지는 해당 트랜젝션에서만 select 가능 → zero payload 불가
+</a>
 * 흐름: saveMemberOrder 메서드 실행 (saveOrder → decreaseStocks → useCoupon)
 * 상황: memberFeignClient.useCoupon(orderId) 호출 실패 (NOT_FOUND_ORDER)
 * 원인: 트랜잭션이 아직 안 끝나서 커밋 미동작 → 타 트랜잭션에서는 select 불가
@@ -70,3 +75,5 @@ Resilience4j 설정
 msa라고 장애 격리가 완벽하진 않다.
 * 주문 로직은 상품 msa, 회원 msa 호출 필요 → 두 msa 중 하나만 장애나도 주문 실패
 * 상품 조회는 타 msa 호출 없음 → 타 msa 장애나도 상관 없음
+
+공통 코드 관리가 힘들다.
