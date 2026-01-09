@@ -17,7 +17,7 @@
 * msa끼리는 rest 방식으로 통신
 * kafaka로 데이터 동기화
 * 공통 mysql은 테이블 및 컬럼 최소화
-* mysql replication 사용
+* mysql replication 사용 (cqrs)
 * zero payload (일부 로직 불가)
   
 ### msa 기술 선택 근거
