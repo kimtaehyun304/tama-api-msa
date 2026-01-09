@@ -54,7 +54,7 @@ jpa CascadeType.PERSIST 미동작으로 인한, 연관관계 데이터 저장 �
 * 해결: saveItem에 em.flush 추가
 
 <a href="https://github.com/kimtaehyun304/tama-api-order/blob/b9185abef225fd19b70eeec796272ff21976da2c/src/main/java/org/example/tamaapi/command/order/OrderService.java#L94">
-  커밋 전까지는 해당 트랜젝션에서만 select 가능 → zero payload 불가
+  커밋 전까지는 해당 트랜잭션에서만 select 가능 → zero payload 불가
 </a>
 
 * 흐름: saveMemberOrder 메서드 실행 (saveOrder → decreaseStocks → useCoupon)
