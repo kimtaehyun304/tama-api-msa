@@ -47,7 +47,7 @@ jpa CascadeType.PERSIST 미동작으로 인한, 연관관계 데이터 저장 �
   @Transactional 미동작으로 인한 jpa em.flush 미동작
 </a>
 
-* item -< colorItems (1:N)
+* 연관관계: item -< colorItems (1:N)
 * 흐름: syncItem 메서드 실행 (saveItem → saveColorItems)
 * 상황: saveColorItems 실패 (item PK가 없다고 롤백됨)
 * 원인: syncItem에서 saveItem 직접 호출 → @Transactional 미동작으로 인한 em.flush 미동작 → insert item 쿼리 미발생
