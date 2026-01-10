@@ -40,7 +40,6 @@ openFeign
 jpa CascadeType.PERSIST 미동작으로 인한, 연관관계 데이터 저장 실패
 * 상황: 카프카 리스너에서 PK가 있는 엔티티 저장 (공통 mysql 동기화)
 * 원인: data jpa save는 엔티티에 pk가 있으면 merge 수행
-* merge라서 JPA CascadeType.PERSIST 미동작
 * 해결: jpa em.persist 사용
   
 <a href="https://github.com/kimtaehyun304/tama-api-common/blob/7d452fa1c0eb8f4c2c92fe5e9374cac73e851619/src/main/java/org/example/tamaapi/service/OrderService.java#L43">
@@ -49,7 +48,7 @@ jpa CascadeType.PERSIST 미동작으로 인한, 연관관계 데이터 저장 �
 
 * 연관관계: item -< colorItems (1:N)
 * 흐름: syncItem 메서드 실행 (saveItem → saveColorItems)
-* 상황: saveColorItems 실패 (item PK가 없다고 롤백됨)
+* 상황: saveColorItems 실패 (item pk가 없다고 롤백됨)
 * 원인: syncItem에서 saveItem 직접 호출 → @Transactional 미동작으로 인한 em.flush 미동작 → insert item 쿼리 미발생
 * 해결: saveItem에 em.flush 추가
 
