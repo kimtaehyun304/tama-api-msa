@@ -3,11 +3,11 @@
 <img width="800" height="800" alt="Image" src="https://github.com/user-attachments/assets/cb7f9a11-0679-4b42-9759-82267055b42d" />
 
 ### 프로젝트 주소
-주문 msa: https://github.com/kimtaehyun304/tama-api-order  
-상품 msa: https://github.com/kimtaehyun304/tama-api-item  
-회원 msa: https://github.com/kimtaehyun304/tama-api-member  
-공통 monolith: https://github.com/kimtaehyun304/tama-api-common 
-
+* 주문 msa: https://github.com/kimtaehyun304/tama-api-order
+* 상품 msa: https://github.com/kimtaehyun304/tama-api-item
+* 회원 msa: https://github.com/kimtaehyun304/tama-api-member
+* 공통 monolith: https://github.com/kimtaehyun304/tama-api-common
+* 지연 이벤트 컨슈머: https://github.com/kimtaehyun304/tama-api-mq-delay
 ### 기술
 * 스프링 부트 3.4 (mvc, security, valid, aop, cache, batch)
 * mysql 8, hibernate 6, data jpa, querydsl 5
