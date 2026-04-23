@@ -8,73 +8,22 @@
 * 회원 msa: https://github.com/kimtaehyun304/tama-api-member
 * 공통 monolith: https://github.com/kimtaehyun304/tama-api-common
 * 지연 이벤트 컨슈머: https://github.com/kimtaehyun304/tama-api-mq-delay
-### 기술
-* 스프링 부트 3.4 (mvc, security, valid, aop, cache, batch)
-* mysql 8, hibernate 6, data jpa, querydsl 5
-* nginx gateway, openFeign, kafka, resilience4j 
 
-### 구조
-* mysql replication 사용 (cqrs)
-* msa끼리는 rest 방식으로 통신
-* kafaka로 데이터 동기화
-* 공통 mysql은 테이블 및 컬럼 최소화
-* atomic integer로 read db들 분산
-* zero payload (일부 제외)
-  
-### msa 기술 선택 근거
-nginx gateway
-* 단순 라우팅이 필요한거라, sping cloud gateway 선택 X
-* jwt 인증을 각 msa에서 수행 (이미 만든 api의 url과 로직을 수정하긴 어려움)
+### 기술 스택
+*  nginx 1.29 (gateway), openFeign 13, resilience4j 2, confluent kafka 7, docker-compose
+*  각 msa에서 토큰 인증을 해서 gateway는 라우팅만 하려고 nginx 선택
+*  database per service 패턴 + 폴링 기반 트랜잭셔널 아웃박스 패턴 
+*  sql 조인을 위한 공통 db (테이블과 컬럼을 최소화)
+*  상대 서버 부하시 회복 시간을 벌기위해, 이벤트를 지연 토픽에 발행
+*  주문 로직은 api 호출 방식, 보상 트랜잭션은 이벤트 (링크)
 
-kafka
-* 조인 쿼리용 DB 동기화를 위해 사용
-* 데이터 정합성을 위해 메시지 시스템 사용 (장애 이후 자동 복구)
-* 주의 사항 앎 ex) 이벤트 소비 순서, 중복, 수동 커밋
-
-openFeign
-* @GetMapping에 @RequestBody를 쓰기위해, 내부 구현체 Apache HTTP Client 5로 변경
-* http 표준이 바뀌어서 get 요청에 요청 바디 써도 된다고 판단
-* 성능도 기본 구현체인 HttpURLConnection 보다 나음
-
-### 트러블 슈팅
-jpa CascadeType.PERSIST 미동작으로 인한, 연관관계 데이터 저장 실패
-* 상황: 카프카 리스너에서 PK가 있는 엔티티 저장 (공통 mysql 동기화)
-* 원인: data jpa save는 엔티티에 pk가 있으면 merge 수행
-* 해결: jpa em.persist 사용
-  
-<a href="https://github.com/kimtaehyun304/tama-api-common/blob/7d452fa1c0eb8f4c2c92fe5e9374cac73e851619/src/main/java/org/example/tamaapi/service/OrderService.java#L43">
-  @Transactional 미동작으로 인한 jpa em.flush 미동작
-</a>
-
-* 연관관계: item -< colorItems (1:N)
-* 흐름: syncItem 메서드 실행 (saveItem → saveColorItems)
-* 상황: saveColorItems 실패 (item pk가 없다고 롤백됨)
-* 원인: syncItem에서 saveItem 직접 호출 → @Transactional 미동작으로 인한 em.flush 미동작 → insert item 쿼리 미발생
-* 해결: saveItem에 em.flush 추가
-
-<a href="https://github.com/kimtaehyun304/tama-api-order/blob/b9185abef225fd19b70eeec796272ff21976da2c/src/main/java/org/example/tamaapi/command/order/OrderService.java#L94">
-  커밋 전까지는 해당 트랜잭션에서만 select 가능 → zero payload 불가
-</a>
-
-* 흐름: saveMemberOrder 메서드 실행 (saveOrder → decreaseStocks → useCoupon)
-* 상황: memberFeignClient.useCoupon(orderId) 호출 실패 (NOT_FOUND_ORDER)
-* 원인: 트랜잭션이 아직 안 끝나서 커밋 미동작 → 타 트랜잭션에서는 select 불가
-* 해결: orderId 말고 필요한 데이터 전달 ex) usedCouponPrice, orderItemsPrice
-  
-kafka 설정
-* application.yml에서 prducer 직렬화, consumer 역직렬화, listener ack-mode: manual
-* 이벤트 소비 순서 보장, 중복 방지: 1토픽 1파티션, consumer group
-
-openFeign 설정
-* http 응답을 예외 메시지로 쓰기 위해 ErrorDecoder 오버라이드 ex)응답 직렬화
-
-Resilience4j 설정
-* fallback을 등록하지 않으면, NoFallbackAvailableException 발생 (예외를 래핑함)
-* fallback 추가하고 예외를 그대로 반환하도록 설정 ex)T타입 반환
-
-### 알게된 점
-* 주문 로직은 다른 msa를 호출하므로 장애 영향을 받는다
-* 상품 조회는 다른 msa를 호출하지 않기에 장애가 격리된다
-* 서비스마다 따로 배포하는 목적으로도 msa를 쓴다
-* 공통 코드 동기화가 힘들다
-* 개발, 운영 힘드니까 최대한 모놀리스에서 문제를 해결하자
+### 이슈 해결 & 성능 개선
+*  openFeign http 구현체를 Apache HTTP Client 5로 변경
+*  kafka 메시지 소비 순서 보장, 메시지 유실 및 중복 방지, 수동 커밋 설정 (링크)
+*  주문 서버 스케일 아웃시 아웃박스 폴링에서 경합을 방지하려고 스킵락 사용  
+ㄴ  kafka.send()는 CompletableFuture를 통해 비동기 기반 병렬로 실행  
+*  api 호출이 타임아웃으로 실패할 경우, db 반영은 됐을 수도 있어서 로그로 확인  
+ㄴ 재고 update 후, 로그 테이블에 기록 저장 (한 트랜잭션이라 신뢰 가능)  
+*  서킷브레이커 ignore-exception에 NotEnoughStockException 등록  
+ㄴ 주문 서버의 itemFeignFallback에서 http 응답을 보고 알맞은 예외로 변환  
+*  data jpa save()는 pk가 있으면 merge로 동작해서 대신 em.persist() 사용  
