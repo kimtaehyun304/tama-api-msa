@@ -1,13 +1,13 @@
 <h1>기존 쇼핑몰 msa 전환 / 2025-11 ~</h1>
   
-<img width="800" height="800" alt="Image" src="https://github.com/user-attachments/assets/cb7f9a11-0679-4b42-9759-82267055b42d" />
+<img width="760" height="171" alt="Image" src="https://github.com/user-attachments/assets/0a2e8777-7e84-4741-88a2-71e3b563a1cb" />
 
 ### 프로젝트 주소
 * 주문 msa: https://github.com/kimtaehyun304/tama-api-order
 * 상품 msa: https://github.com/kimtaehyun304/tama-api-item
 * 회원 msa: https://github.com/kimtaehyun304/tama-api-member
 * 공통 monolith: https://github.com/kimtaehyun304/tama-api-common
-* 지연 이벤트 컨슈머: https://github.com/kimtaehyun304/tama-api-mq-delay
+* 지연 이벤트 msa: https://github.com/kimtaehyun304/tama-api-mq-delay
 
 ### 기술 스택
 *  nginx 1.29 (gateway), openFeign 13, resilience4j 2, confluent kafka 7, docker-compose
@@ -26,4 +26,5 @@
 ㄴ 재고 update 후, 로그 테이블에 기록 저장 (한 트랜잭션이라 신뢰 가능)  
 *  서킷브레이커 ignore-exception에 NotEnoughStockException 등록  
 ㄴ 주문 서버의 itemFeignFallback에서 http 응답을 보고 알맞은 예외로 변환  
+*  주문 완료전에 재고만 차감되고 주문 서버가 down 될걸 대비하여, 재고 롤백 스케줄러 사용
 *  data jpa save()는 pk가 있으면 merge로 동작해서 대신 em.persist() 사용  
