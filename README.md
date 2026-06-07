@@ -6,8 +6,10 @@
 * 주문 msa: https://github.com/kimtaehyun304/tama-api-order
 * 상품 msa: https://github.com/kimtaehyun304/tama-api-item
 * 회원 msa: https://github.com/kimtaehyun304/tama-api-member
-* 공통 msa: https://github.com/kimtaehyun304/tama-api-common
+* 공통 msa (조인 쿼리용): https://github.com/kimtaehyun304/tama-api-common
 * 지연 이벤트 msa: https://github.com/kimtaehyun304/tama-api-mq-delay
+* 공유 라이브러리: https://github.com/kimtaehyun304/tama-api-msa-share-lib
+* k8s 메니페스트 저장소: https://github.com/kimtaehyun304/eks-helm
 
 ### 기술 스택
 *  nginx 1.29 (gateway), openFeign 13, resilience4j 2, confluent kafka 7, docker-compose
