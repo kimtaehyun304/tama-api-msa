@@ -6,7 +6,7 @@
 * 주문 msa: https://github.com/kimtaehyun304/tama-api-order
 * 상품 msa: https://github.com/kimtaehyun304/tama-api-item
 * 회원 msa: https://github.com/kimtaehyun304/tama-api-member
-* 공통 monolith: https://github.com/kimtaehyun304/tama-api-common
+* 공통 msa: https://github.com/kimtaehyun304/tama-api-common
 * 지연 이벤트 msa: https://github.com/kimtaehyun304/tama-api-mq-delay
 
 ### 기술 스택
