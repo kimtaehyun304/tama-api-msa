@@ -3,6 +3,7 @@
 <img width="760" height="171" alt="Image" src="https://github.com/user-attachments/assets/0a2e8777-7e84-4741-88a2-71e3b563a1cb" />
 
 ### 프로젝트 주소
+* 원본 모놀리스: https://github.com/kimtaehyun304/tama-api
 * 주문 msa: https://github.com/kimtaehyun304/tama-api-order
 * 상품 msa: https://github.com/kimtaehyun304/tama-api-item
 * 회원 msa: https://github.com/kimtaehyun304/tama-api-member
