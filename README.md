@@ -13,6 +13,7 @@
 * k8s 메니페스트 저장소: https://github.com/kimtaehyun304/eks-helm
 
 ### 기술 스택
+*  싱글 모듈 멀티 프로젝트 (공통 코드는 라이브러리 사용)
 *  nginx 1.29 (gateway), openFeign 13, resilience4j 2, confluent kafka 7, docker-compose
 *  각 msa에서 토큰 인증을 해서 gateway는 라우팅만 하려고 nginx 선택
 *  database per service 패턴 + 폴링 기반 트랜잭셔널 아웃박스 패턴 
