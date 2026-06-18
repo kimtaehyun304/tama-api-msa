@@ -1,6 +1,6 @@
 <h1>기존 쇼핑몰 msa 전환 / 2025-11 ~</h1>
   
-<img width="760" height="171" alt="Image" src="https://github.com/user-attachments/assets/0a2e8777-7e84-4741-88a2-71e3b563a1cb" />
+<img width="959" height="457" alt="Image" src="https://github.com/user-attachments/assets/60400812-29f8-4b08-b807-410458ba5ce0" />
 
 ### 프로젝트 주소
 * 원본 모놀리스: https://github.com/kimtaehyun304/tama-api
