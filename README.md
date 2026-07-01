@@ -19,11 +19,11 @@
 *  database per service 패턴 + 폴링 기반 트랜잭셔널 아웃박스 패턴 
 *  sql 조인을 위한 공통 db (테이블과 컬럼을 최소화)
 *  상대 서버 부하시 회복 시간을 벌기위해, 이벤트를 지연 토픽에 발행
-*  주문 로직은 api 호출 방식, 보상 트랜잭션은 이벤트 (링크)
+*  주문 로직은 api 호출 방식, 보상 트랜잭션은 이벤트 [(링크)](https://velog.io/@hyungman304/%EB%82%B4%EA%B0%80-EDA-%EB%8C%80%EC%8B%A0-API-%EB%8F%99%EA%B8%B0-%ED%98%B8%EC%B6%9C%EC%9D%84-%EC%84%A0%ED%83%9D%ED%95%9C-%EC%9D%B4%EC%9C%A0)
 
 ### 이슈 해결 & 성능 개선
 *  openFeign http 구현체를 Apache HTTP Client 5로 변경
-*  kafka 메시지 소비 순서 보장, 메시지 유실 및 중복 방지, 수동 커밋 설정 (링크)
+*  kafka 메시지 소비 순서 보장, 메시지 유실 및 중복 방지, 수동 커밋 설정 [(링크)](https://velog.io/@hyungman304/kafka-%EC%A3%BC%EC%9D%98%EC%82%AC%ED%95%AD)
 *  주문 서버 스케일 아웃시 아웃박스 폴링에서 경합을 방지하려고 스킵락 사용  
 ㄴ  kafka.send()는 CompletableFuture를 통해 비동기 기반 병렬로 실행  
 *  api 호출이 타임아웃으로 실패할 경우, db 반영은 됐을 수도 있어서 로그로 확인  
